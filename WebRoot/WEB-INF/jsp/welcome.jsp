@@ -5,6 +5,6 @@
 <title>Welcome</title>
 </head>
 <body>
-Welcome ,${username }
+${message }
 </body>
 </html>

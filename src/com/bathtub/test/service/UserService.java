@@ -13,7 +13,12 @@
 /**************************************************************************/
 package com.bathtub.test.service;
 
-public interface UserService
+import com.bathtub.core.base.service.BaseService;
+import com.bathtub.test.entity.User;
+
+public interface UserService extends BaseService
 {
 	public boolean login(String name, String password);
+	
+	public void save(User user);
 }

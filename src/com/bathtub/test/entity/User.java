@@ -13,34 +13,23 @@
 /**************************************************************************/
 package com.bathtub.test.entity;
 
-public class User
-{
-	private Long id;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
-	private String name;
+import com.bathtub.core.base.entity.BaseModel;
+
+@SuppressWarnings("serial")
+@Entity
+@Table(name="T_TEST_USER")
+public class User extends BaseModel
+{
+
+	private String username;
 
 	private String pwd;
 
-	public Long getId()
-	{
-		return id;
-	}
-
-	public void setId(Long id)
-	{
-		this.id = id;
-	}
-
-	public String getName()
-	{
-		return name;
-	}
-
-	public void setName(String name)
-	{
-		this.name = name;
-	}
-
+	@Column(name="PWD")
 	public String getPwd()
 	{
 		return pwd;
@@ -49,6 +38,17 @@ public class User
 	public void setPwd(String pwd)
 	{
 		this.pwd = pwd;
+	}
+
+	@Column(name="USERNAME")
+	public String getUsername()
+	{
+		return username;
+	}
+
+	public void setUsername(String username)
+	{
+		this.username = username;
 	}
 
 	

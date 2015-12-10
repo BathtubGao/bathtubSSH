@@ -16,6 +16,7 @@ package com.bathtub.test.action;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.bathtub.core.base.action.BaseAction;
+import com.bathtub.test.entity.User;
 import com.bathtub.test.service.UserService;
 
 public class TestAction extends BaseAction 
@@ -32,11 +33,25 @@ public class TestAction extends BaseAction
 		System.out.println("username:"+username+" password:"+password);  
         if(userService.login(username,password))    
         {  
+        	this.setRequestAttribute("message", "登陆成功！");
             return SUCCESS;    
         }  
-        return ERROR;    
+        else
+        {
+        	return ERROR;	
+        }
+            
     }
 
+	public String save()
+	{
+		User user = new User();
+		user.setUsername(username);
+		user.setPwd(password);
+		userService.save(user);
+		this.setRequestAttribute("message", "保存成功！");
+		return SUCCESS;
+	}
 
 	public String getUsername()
 	{

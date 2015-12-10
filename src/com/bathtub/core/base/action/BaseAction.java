@@ -1,17 +1,10 @@
-/**************************************************************************/
-/*                                                                        */
-/* Copyright (c) 2012-2013 Jiangsu Hongxin System Integration Co., Ltd.   */
-/*                                                                        */
-/* PROPRIETARY RIGHTS of Jiangsu Hongxin are involved in the 　　　　　　 */
-/* subject matter of this material.  All manufacturing, reproduction, use,*/
-/* and sales rights pertaining to this subject matter are governed by the */
-/* license agreement. The recipient of this software implicitly accepts   */
-/* the terms of the license.                                              */
-/* 本软件文档资料是江苏鸿信公司的资产,任何人士阅读和使用本资料必须获得    */
-/* 相应的书面授权,承担保密责任和接受相应的法律约束.                       */
-/*                                                                        */
-/**************************************************************************/
 package com.bathtub.core.base.action;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.struts2.ServletActionContext;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -29,4 +22,86 @@ public class BaseAction extends ActionSupport
 	protected static final String LIST = "list";
 
 	protected static final String JSON_ERROR = "Json Converted Error";
+	
+	
+	public BaseAction() {
+	}
+
+	/**
+	 * 获取HTTP请求
+	 * 
+	 * @return
+	 */
+	public HttpServletRequest getRequest() {
+		return ServletActionContext.getRequest();
+	}
+
+	/**
+	 * 获取Session对象
+	 * 
+	 * @return
+	 */
+	public HttpSession getSession() {
+		return ServletActionContext.getRequest().getSession();
+	}
+
+	/**
+	 * 获取HTTP应答
+	 * 
+	 * @return
+	 */
+	public HttpServletResponse getResponse() {
+		return ServletActionContext.getResponse();
+	}
+
+	/**
+	 * 根据key获取在Session中保存的对象
+	 * 
+	 * @param key
+	 * @return
+	 */
+	public Object getSessionAttribute(String key) {
+		return this.getSession().getAttribute(key);
+
+	}
+
+	/**
+	 * 根据key获取HTTP请求中保存的对象
+	 * 
+	 * @param key
+	 * @return
+	 */
+	public Object getRequestAttribute(String key) {
+		return this.getRequest().getAttribute(key);
+	}
+
+	/**
+	 * 将对象保存在HTTP请求中
+	 * 
+	 * @param key
+	 * @param object
+	 */
+	public void setRequestAttribute(String key, Object object) {
+		this.getRequest().setAttribute(key, object);
+	}
+
+	/**
+	 * 将对象保存在Session中
+	 * 
+	 * @param key
+	 * @param object
+	 */
+	public void setSessionAttribute(String key, Object object) {
+		this.getSession().setAttribute(key, object);
+	}
+
+	/**
+	 * 根据key获取请求的参数值
+	 * 
+	 * @param key
+	 * @return
+	 */
+	public String getRequestParameter(String key) {
+		return this.getRequest().getParameter(key);
+	}
 }

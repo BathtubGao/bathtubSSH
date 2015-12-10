@@ -13,9 +13,12 @@
 /**************************************************************************/
 package com.bathtub.test.dao;
 
+import com.bathtub.core.base.dao.BaseDao;
 import com.bathtub.test.entity.User;
 
-public interface UserDao   
+public interface UserDao extends BaseDao
 {  
-    public User getUserByName(String name);   
+    public User getUserByName(String name);
+
+	public void save(User user);   
 }  

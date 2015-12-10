@@ -1,55 +1,40 @@
-/**************************************************************************/
-/*                                                                        */
-/* Copyright (c) 2012-2013 Jiangsu Hongxin System Integration Co., Ltd.   */
-/*                                                                        */
-/* PROPRIETARY RIGHTS of Jiangsu Hongxin are involved in the 　　　　　　 */
-/* subject matter of this material.  All manufacturing, reproduction, use,*/
-/* and sales rights pertaining to this subject matter are governed by the */
-/* license agreement. The recipient of this software implicitly accepts   */ 
-/* the terms of the license.                                              */
-/* 本软件文档资料是江苏鸿信公司的资产,任何人士阅读和使用本资料必须获得    */
-/* 相应的书面授权,承担保密责任和接受相应的法律约束.                       */
-/*                                                                        */
-/**************************************************************************/
 package com.bathtub.test.dao.impl;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import org.hibernate.Criteria;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Restrictions;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.bathtub.core.base.dao.impl.BaseDaoImpl;
 import com.bathtub.test.dao.UserDao;
 import com.bathtub.test.entity.User;
 
-@Repository(value = "userDao")  
-public class UserDaoImpl implements UserDao   
-{  
-    @Autowired  
-    private SessionFactory sessionFactory;  
-      
-    public User getUserByName(String name)  
-    {  
-        Session session = sessionFactory.getCurrentSession();  
-        List<User> list = new ArrayList<User>();   
-          
-        //通过Hibernate的Criteria查询     
-        Criteria criteria = session.createCriteria(User.class);    
-        if (!(null == name && "".equals(name)))   
-        {    
-            criteria.add(Restrictions.eq("name", name));    
-        }    
-        list = criteria.list();    
-          
-        if(list != null && list.size() > 0)   
-        {  
-            return list.get(0);    
-        }  
-        return null;    
-    }  
-      
-}  
+@Component("userDao")
+public class UserDaoImpl extends BaseDaoImpl implements UserDao
+{
+
+	public User getUserByName(String name)
+	{
+		Map<String, Object> paraMap = new HashMap<String, Object>();
+		//paraMap.put("username", name);
+		List<User> userList = this.findListByHqlId("findUserByMap", paraMap);
+		if (userList.size() > 0)
+		{
+			return userList.get(0);
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	@Transactional
+	public void save(User user)
+	{
+		user.setId(null);
+		this.saveOrUpdateObject(user);
+	}
+
+}

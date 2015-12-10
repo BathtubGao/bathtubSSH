@@ -21,108 +21,79 @@
 			</list>
 		</property>
 	</bean>
-
-	<!--  数据源配置 -->
-	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"  
-        destroy-method="close">  
-        <property name="jdbcUrl" value="${hibernate.connection.url}" />  
-        <property name="driverClass" value="${hibernate.connection.driver_class}" />  
-        <property name="user" value="${hibernate.connection.username}" />  
-        <property name="password" value="${hibernate.connection.password}" />  
-        <property name="acquireIncrement" value="${c3p0.acquireIncrement}" />  
-        <property name="initialPoolSize" value="${c3p0.initialPoolSize}" />  
-        <property name="minPoolSize" value="${c3p0.minPoolSize}" />  
-        <property name="maxPoolSize" value="${c3p0.maxPoolSize}" />  
-        <property name="maxStatements" value="${c3p0.maxStatements}" />  
-        <property name="numHelperThreads" value="${c3p0.numHelperThreads}" />  
-        <property name="maxIdleTime" value="${c3p0.maxIdleTime}" />  
-    </bean>  
-       
-	<bean id="sessionFactory"
-		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-		<property name="dataSource">
-			<ref local="dataSource" />
+	
+	<!-- iBatis配置 -->
+	<bean id="sqlMapClient"
+		class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<!-- configLocation必须 -->
+		<property name="configLocation">
+		   <value>classpath:sql-map-config.xml</value>
 		</property>
-
-		<property name="mappingResources">
-			<list>
-				<value>com/bathtub/test/entity/User.hbm.xml</value>
-			</list>
-		</property>
-
-		<property name="hibernateProperties">
-			<props>
-				<prop key="hibernate.dialect">
-					${hibernate.dialect}
-				</prop>
-				<prop key="hibernate.show_sql">
-					${hibernate.show_sql}
-				</prop>
-				<prop key="hibernate.generate_statistics">true</prop>
-				<prop key="hibernate.max_fetch_depth">
-					${hibernate.max_fetch_depth}
-				</prop>
-				<prop key="hibernate.jdbc.batch_versioned_data">
-					${hibernate.jdbc.batch_versioned_data}
-				</prop>
-				<prop key="hibernate.batch_size">
-					${hibernate.jdbc.batch_size}
-				</prop>
-				<prop key="hibernate.connection.release_mode">
-					auto
-				</prop>
-				<prop key="hibernate.autoReconnect">true</prop>
-				<prop key="hibernate.use_sql_comments">false</prop>
-				<prop key="hibernate.cglib.use_reflection_optimizer">
-					true
-				</prop>
-				<prop key="hibernate.hbm2ddl.auto">update</prop>
-				<prop key="hibernate.format_sql">
-					${hibernate.format_sql}
-				</prop>
-			</props>
+		<property name="mappingLocations">
+			<value>classpath:com/bathtub/**/sql-*.xml</value>
 		</property>
 	</bean>
 
-	<bean id="transactionManager"
-		class="org.springframework.orm.hibernate4.HibernateTransactionManager"
-		p:sessionFactory-ref="sessionFactory" />
-	<tx:advice id="txAdvice" transaction-manager="transactionManager">
-		<tx:attributes>
-			<tx:method name="save*" propagation="REQUIRED" />
-			<tx:method name="add*" propagation="REQUIRED" />
-			<tx:method name="create*" propagation="REQUIRED" />
-			<tx:method name="insert*" propagation="REQUIRED" />
-			<tx:method name="update*" propagation="REQUIRED" />
-			<tx:method name="merge*" propagation="REQUIRED" />
-			<tx:method name="del*" propagation="REQUIRED" />
-			<tx:method name="remove*" propagation="REQUIRED" />
-			<tx:method name="put*" propagation="REQUIRED" />
-			<tx:method name="use*" propagation="REQUIRED" />
-			<!--hibernate4必须配置为开启事务 否则 getCurrentSession()获取不到 -->
-			<tx:method name="get*" propagation="REQUIRED"
-				read-only="true" />
-			<tx:method name="count*" propagation="REQUIRED"
-				read-only="true" />
-			<tx:method name="find*" propagation="REQUIRED"
-				read-only="true" />
-			<tx:method name="list*" propagation="REQUIRED"
-				read-only="true" />
-			<tx:method name="*" read-only="true" />
-		</tx:attributes>
-	</tx:advice>
+	<!--  数据源配置 -->
+	<bean id="dataSource"
+		class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="${db.driverClassName}" />
+		<property name="url" value="${db.url}" />
+		<property name="username" value="${db.username}" />
+		<property name="password" value="${db.password}" />
+		<property name="maxActive" value="${dataSource.maxActive}" />
+		<property name="maxIdle" value="${dataSource.maxIdle}" />
+		<property name="minIdle" value="${dataSource.minIdle}" />
+		<property name="maxWait" value="${dataSource.maxWait}" />
+		<property name="defaultAutoCommit"
+			value="${dataSource.defaultAutoCommit}" />
+		<property name="removeAbandoned"
+			value="${dataSource.removeAbandoned}" />
+		<property name="removeAbandonedTimeout"
+			value="${dataSource.removeAbandonedTimeout}" />
+		<property name="logAbandoned"
+			value="${dataSource.logAbandoned}" />
+		<property name="testWhileIdle"
+			value="${dataSource.testWhileIdle}" />
+		<property name="testOnBorrow"
+			value="${dataSource.testOnBorrow}" />
+		<property name="testOnReturn"
+			value="${dataSource.testOnReturn}" />
+		<property name="validationQuery"
+			value="SELECT COUNT(1) FROM DUAL" />
+		<property name="timeBetweenEvictionRunsMillis" value="30000" />
+		<property name="numTestsPerEvictionRun"
+			value="${dataSource.maxActive}" />
+		<property name="minEvictableIdleTimeMillis" value="1800000" />
+	</bean>
 
-	<aop:config proxy-target-class="true">
-		<aop:advisor
-			pointcut="(execution(* com.bathtub.test.dao.impl.*.*(..))) OR execution(* com.bathtub.test.dao.impl.*.*(..))"
-			advice-ref="txAdvice" />
-	</aop:config>
-
-	<context:component-scan base-package="com.bathtub.test">
-		<context:exclude-filter type="annotation"
-			expression="org.springframework.stereotype.Controller" />
-	</context:component-scan>
-
-
+	<!--从连接池中抽取出本地数据库JDBC对象 几种JDBC对象抽取器，可根据不同的应用服务器进行调整
+		WebLogic：WebLogicNativeJdbcExtractor
+		WebSphere：WebSphereNativeJdbcExtractor
+		JBoss：JBossNativeJdbcExtractor
+	-->
+	<bean id="nativeJdbcExtractor"
+		class="org.springframework.jdbc.support.nativejdbc.CommonsDbcpNativeJdbcExtractor"
+		lazy-init="true" />
+		
+	<!--Spring 提供了两种LobHandler 用于处理Blob数据
+		DefaultLobHandler：适用于大部分的数据库，如SqlServer，MySQL，对Oracle 10g也适用，但不适用于Oracle9i
+		oracleLobHandler：适用于Oracle 9i和Oracle 10g。
+	-->
+	<bean id="oracleLobHandler"
+		class="org.springframework.jdbc.support.lob.OracleLobHandler"
+		lazy-init="true">
+		<property name="nativeJdbcExtractor" ref="nativeJdbcExtractor" />
+	</bean>
+	
+	<context:annotation-config />
+	<!-- 使用annotation 自动注册bean,并保证@Required,@Autowired的属性被注入 -->
+	<context:component-scan base-package="com.bathtub" />
+    <aop:aspectj-autoproxy proxy-target-class="true" />
+    
+    <import resource="applicationContext-hibernate.xml" />
+    
 </beans>
 

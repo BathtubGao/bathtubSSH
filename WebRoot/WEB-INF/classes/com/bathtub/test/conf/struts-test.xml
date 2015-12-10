@@ -7,10 +7,17 @@
 		<action name="loginform">
 			<result name="success">/WEB-INF/jsp/login.jsp</result>
 		</action>
-		<action name="login"
-			class="com.bathtub.test.action.TestAction">
+		
+		<action name="login" class="com.bathtub.test.action.TestAction">
 			<result name="success">/WEB-INF/jsp/welcome.jsp</result>
 			<result name="error">/WEB-INF/jsp/login.jsp</result>
+		</action>
+		
+		<action name="insertUser">
+			<result name="success">/WEB-INF/jsp/insertUser.jsp</result>
+		</action>
+		<action name="saveUser" class="com.bathtub.test.action.TestAction" method="save">
+			<result name="success">/WEB-INF/jsp/welcome.jsp</result>
 		</action>
 	</package>
 </struts>
