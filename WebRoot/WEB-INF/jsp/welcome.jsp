@@ -5,6 +5,6 @@
 <title>Welcome</title>
 </head>
 <body>
-${message }
+${LOGIN_MESSAGE }
 </body>
 </html>

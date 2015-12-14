@@ -21,14 +21,14 @@
 			</list>
 		</property>
 	</bean>
-	
+
 	<!-- iBatis配置 -->
 	<bean id="sqlMapClient"
 		class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
 		<property name="dataSource" ref="dataSource" />
 		<!-- configLocation必须 -->
 		<property name="configLocation">
-		   <value>classpath:sql-map-config.xml</value>
+			<value>classpath:sql-map-config.xml</value>
 		</property>
 		<property name="mappingLocations">
 			<value>classpath:com/bathtub/**/sql-*.xml</value>
@@ -77,7 +77,7 @@
 	<bean id="nativeJdbcExtractor"
 		class="org.springframework.jdbc.support.nativejdbc.CommonsDbcpNativeJdbcExtractor"
 		lazy-init="true" />
-		
+
 	<!--Spring 提供了两种LobHandler 用于处理Blob数据
 		DefaultLobHandler：适用于大部分的数据库，如SqlServer，MySQL，对Oracle 10g也适用，但不适用于Oracle9i
 		oracleLobHandler：适用于Oracle 9i和Oracle 10g。
@@ -87,13 +87,15 @@
 		lazy-init="true">
 		<property name="nativeJdbcExtractor" ref="nativeJdbcExtractor" />
 	</bean>
-	
+
 	<context:annotation-config />
 	<!-- 使用annotation 自动注册bean,并保证@Required,@Autowired的属性被注入 -->
 	<context:component-scan base-package="com.bathtub" />
-    <aop:aspectj-autoproxy proxy-target-class="true" />
-    
-    <import resource="applicationContext-hibernate.xml" />
-    
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+
+	<!-- hibernate连接数据库配置 -->
+	<import resource="applicationContext-hibernate.xml" />
+	<!-- 用户登录安全框架配置 -->
+	<import resource="applicationContext-security.xml" />
 </beans>
 
