@@ -8,4 +8,4 @@ tag v0.2 2015-12-10
 说明：参考公司框架，集成了iBatis,采用了spring注解，改进了hibernate的集成方式，实现了基本的新增和查询
 
 tag v0.3 2015-12-14
-说明：登陆整合采Shiro，参考资料：http://my.oschina.net/u/2334022/blog/409004；http://my.oschina.net/miger/blog/283526
+说明：登陆整合采Shiro，参考资料：http://my.oschina.net/u/2334022/blog/409004   http://my.oschina.net/miger/blog/283526
