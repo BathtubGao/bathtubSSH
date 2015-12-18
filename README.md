@@ -9,3 +9,6 @@ tag v0.2 2015-12-10
 
 tag v0.3 2015-12-14
 说明：登陆整合采Shiro，参考资料：http://my.oschina.net/u/2334022/blog/409004   http://my.oschina.net/miger/blog/283526
+
+tag v0.4 2015-12-18
+说明：增加基础用户表，调整登陆方法，增加退出功能
