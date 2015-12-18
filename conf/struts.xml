@@ -9,5 +9,7 @@
 	<constant name="struts.ognl.allowStaticMethodAccess" value="true" />
 	<constant name="struts.multipart.maxSize" value="20485760" />
       
+      <include file="com/bathtub/module/admin/conf/struts-common.xml" />
+      
 	<include file="com/bathtub/**/struts*.xml" />
 </struts>

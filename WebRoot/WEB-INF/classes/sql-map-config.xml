@@ -4,4 +4,5 @@
 <sqlMapConfig>
 	<!-- 必需空文件 -->
 	<sqlMap resource="com/bathtub/module/admin/conf/sql-map-empty.xml"/>
+	
 </sqlMapConfig>
